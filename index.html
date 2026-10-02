@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Receita mensal por regiao - 1o semestre 2026</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; color: #222; }
+    p.conclusao { line-height: 1.5; }
+  </style>
+</head>
+<body>
+  <h1>Receita mensal por regiao (jan-jun 2026)</h1>
+  <canvas id="grafico" aria-label="Receita mensal por regiao" role="img"></canvas>
+  <h2>Conclusao</h2>
+  <p class="conclusao" id="conclusao">Entre janeiro e junho de 2026 a receita total do relatorio foi de R$ 931.274,06, e o Sudeste foi a regiao lider, com R$ 265.077,49, seguido de perto por Nordeste e Centro-Oeste; o Sul fica bem abaixo, com R$ 146.009,84. Dois cuidados com os dados afetam esse retrato. Primeiro, as 3 vendas orfas (id_loja=999, somando R$ 8.120,00) nao tem loja cadastrada e por isso somem do relatorio no inner join: a receita real da empresa e maior do que a mostrada aqui. Segundo, a loja 108/Batel (Sul, PR) existe no cadastro mas nao teve nenhuma venda, entao nao aparece no pivot; a receita do Sul vem so da loja 107/Moinhos, o que explica boa parte da distancia para as outras regioes.</p>
+  <script>
+    new Chart(document.getElementById("grafico"), {
+      type: "line",
+      data: { labels: ["2026-01", "2026-02", "2026-03", "2026-04", "2026-05", "2026-06"], datasets: [{"label": "Centro-Oeste", "data": [44144.42, 48227.94, 41682.96, 38855.88, 46672.07, 38740.7], "borderColor": "#2a78d6", "backgroundColor": "#2a78d6", "tension": 0.2}, {"label": "Nordeste", "data": [46222.85, 48042.96, 45850.7, 44053.04, 35371.5, 42321.71], "borderColor": "#e8862f", "backgroundColor": "#e8862f", "tension": 0.2}, {"label": "Sudeste", "data": [44767.33, 48544.11, 35816.56, 46281.64, 41083.43, 48584.42], "borderColor": "#2e9e6a", "backgroundColor": "#2e9e6a", "tension": 0.2}, {"label": "Sul", "data": [27703.36, 24985.87, 19584.52, 22976.51, 25094.42, 25665.16], "borderColor": "#c4448f", "backgroundColor": "#c4448f", "tension": 0.2}] },
+      options: {
+        plugins: { title: { display: true, text: "Receita (R$) por regiao e mes - fonte: pivot_receita.csv" } },
+        scales: { y: { beginAtZero: true, title: { display: true, text: "Receita (R$)" } } }
+      }
+    });
+  </script>
+</body>
+</html>

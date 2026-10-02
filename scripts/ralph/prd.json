@@ -50,7 +50,7 @@
         "pytest tests/test_web.py passa"
       ],
       "priority": 3,
-      "passes": false,
+      "passes": true,
       "notes": ""
     }
   ]

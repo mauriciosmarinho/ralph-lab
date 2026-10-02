@@ -25,3 +25,12 @@ Started: qui 01 out 2026 21:43:52 -03
   - Totais por regiao (6 meses): Sudeste ~265077.49 (lider), Nordeste ~261862.76, Centro-Oeste ~258323.97, Sul ~146009.84 (Sul so tem a loja 107; 108/Batel sem vendas)
   - Ordem das regioes no pivot e fixa (lista REGIOES em pivot.py)
 ---
+
+## 2026-10-01 22:10 - US-003
+- Implementado web.py (stdlib) lendo pivot_receita.csv e gerando index.html estatico com grafico de linhas Chart.js (CDN, dados embutidos via json.dumps) e <p class="conclusao"> (~640 caracteres) citando Sudeste lider, 3 vendas orfas (R$ 8.120,00) e loja 108/Batel sem vendas
+- Files changed: web.py, tests/test_web.py, index.html, scripts/ralph/prd.json
+- Verificacao no browser nao feita (sem ferramenta de browser); abrir index.html manualmente para conferir o grafico (precisa de internet p/ CDN)
+- **Learnings for future iterations:**
+  - Fixture de tests/test_web.py roda join -> pivot -> web para regenerar toda a cadeia
+  - Valores da conclusao sao calculados do pivot (total, lider, Sul); so o valor das orfas (R$ 8.120,00) e fixo no texto
+---
