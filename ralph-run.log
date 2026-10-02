@@ -1,0 +1,46 @@
+Starting Ralph - Tool: claude - Max iterations: 10
+
+===============================================================
+  Ralph Iteration 1 of 10 (claude)
+===============================================================
+US-001 (inner join of sales and stores) is finished and committed on the new branch `ralph/pipeline-vendas` as `792a305`.
+
+- **What it does:** `join.py` joins `vendas.csv` and `lojas.csv` on `id_loja` and writes `vendas_lojas.csv`. The result has 420 rows and `receita_brl` sums to 931274.06. The 3 sales with `id_loja=999` are dropped because no store has that ID. pandas isn't installed, so it uses Python's built-in `csv` module.
+- **Tests:** `tests/test_join.py` has 3 tests (row count, revenue total, no orphan sales), and all pass. The original `vendas.csv` and `lojas.csv` have the same checksums before and after the run, so they weren't changed.
+- **Other changes:** I added a `.gitignore` for the Python cache folders. In `prd.json`, US-001 is now marked as passing. `progress.txt` has a new Codebase Patterns section and an entry for this story.
+- **Not committed:** `ralph-run.log`, because the loop is still writing to it.
+
+I didn't add a project `CLAUDE.md`, since the reusable notes are already in `progress.txt`. US-002 (the revenue pivot) and US-003 (the web page) are still not done, so the next iteration will pick up US-002.
+Iteration 1 complete. Continuing...
+
+===============================================================
+  Ralph Iteration 2 of 10 (claude)
+===============================================================
+I've finished US-002, the revenue pivot by region and month, and committed it as `74e3def`.
+
+- **What was built:** `pivot.py` reads `vendas_lojas.csv` and writes `pivot_receita.csv`. The header is exactly `regiao,2026-01,…,2026-06`, with 4 data rows and 7 columns. All values have 2 decimal places, and the cells add up to 931274.06.
+- **Tests:** I added `tests/test_pivot.py` with 3 tests: the header is exact, the cells sum to the right total, and the file has the right shape and region order. The tests rebuild the join first, so they don't depend on which order the test files run in. Running `pytest tests/` passes all 6 tests (3 for the join, 3 for the pivot).
+- **Six-month totals by region:** Sudeste is the leader at 265,077.49, then Nordeste 261,862.76, Centro-Oeste 258,323.97 and Sul 146,009.84. Sul is much lower because only store 107 has sales; store 108 (Batel) has none. I wrote this down in `progress.txt` for US-003.
+- **PRD:** US-002 is now marked `passes: true`. I didn't update any CLAUDE.md because nothing new and reusable came up.
+
+US-003 (the web page with the chart and conclusion) is still open, so the next iteration will pick it up.
+Iteration 2 complete. Continuing...
+
+===============================================================
+  Ralph Iteration 3 of 10 (claude)
+===============================================================
+US-003 (the web page with the chart and conclusion) is done and committed as `e242564`. All 9 tests in `tests/` pass.
+
+- **`web.py`** reads `pivot_receita.csv` and writes `index.html`. The page is static, with a Chart.js line chart (loaded from a CDN) showing monthly revenue for each of the four regions.
+- **The conclusion** is a `<p>` of about 640 characters. It says Sudeste leads with R$ 265.077,49 out of R$ 931.274,06 total. It covers both data traps:
+  - The 3 sales with `id_loja=999` (R$ 8.120,00) have no matching store, so they drop out of the report.
+  - Store 108/Batel has no sales, so it doesn't show up in the pivot. That's why Sul's revenue comes only from store 107/Moinhos.
+- **Hardcoded value:** the total, the leader and Sul's total are calculated from the pivot. The R$ 8.120,00 is typed into the text and won't update if `vendas.csv` changes.
+- **`tests/test_web.py`** reruns join, pivot and web, then checks for the `<canvas>`/`new Chart(` elements, the regions and months, and a conclusion of at least 300 characters with the required mentions.
+
+I didn't check the chart in a browser because I have no browser tool here. To see it, open `index.html` by hand; it needs internet access to load Chart.js. I marked US-003 as passing in `scripts/ralph/prd.json` and added an entry to `progress.txt`.
+
+<promise>COMPLETE</promise>
+
+Ralph completed all tasks!
+Completed at iteration 3 of 10
