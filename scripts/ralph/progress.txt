@@ -16,3 +16,12 @@ Started: qui 01 out 2026 21:43:52 -03
   - data esta em formato YYYY-MM-DD -> mes = data[:7]
   - vendas.csv/lojas.csv nao sao modificados (conferido via md5sum)
 ---
+
+## 2026-10-01 22:00 - US-002
+- Implementado pivot.py (stdlib, defaultdict) lendo vendas_lojas.csv e gerando pivot_receita.csv (4 regioes x 2026-01..2026-06, soma 931274.06)
+- Files changed: pivot.py, tests/test_pivot.py, pivot_receita.csv
+- **Learnings for future iterations:**
+  - Fixture de tests/test_pivot.py roda join.main() antes de pivot.main() para nao depender da ordem dos testes
+  - Totais por regiao (6 meses): Sudeste ~265077.49 (lider), Nordeste ~261862.76, Centro-Oeste ~258323.97, Sul ~146009.84 (Sul so tem a loja 107; 108/Batel sem vendas)
+  - Ordem das regioes no pivot e fixa (lista REGIOES em pivot.py)
+---
