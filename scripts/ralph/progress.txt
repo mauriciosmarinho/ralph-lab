@@ -1,0 +1,18 @@
+## Codebase Patterns
+- pandas NAO esta instalado: usar csv/stdlib (csv.DictReader/DictWriter)
+- Scripts do pipeline ficam na raiz (join.py, ...) com funcao main(); testes importam o modulo via sys.path e chamam main() numa fixture de modulo, entao pytest regenera a saida
+- Rodar testes com `python -m pytest tests/<arquivo>.py -q` a partir da raiz
+- Valores monetarios gravados com f"{x:.2f}" (ponto decimal, sem milhar)
+
+# Ralph Progress Log
+Started: qui 01 out 2026 21:43:52 -03
+---
+
+## 2026-10-01 21:50 - US-001
+- Implementado join.py (inner join stdlib por id_loja, descarta id_loja=999) gerando vendas_lojas.csv (420 linhas, soma 931274.06)
+- Files changed: join.py, tests/test_join.py, vendas_lojas.csv, .gitignore
+- **Learnings for future iterations:**
+  - vendas_lojas.csv colunas: id_venda,data,id_loja,categoria,unidades,receita_brl,nome_loja,regiao,uf,gerente
+  - data esta em formato YYYY-MM-DD -> mes = data[:7]
+  - vendas.csv/lojas.csv nao sao modificados (conferido via md5sum)
+---

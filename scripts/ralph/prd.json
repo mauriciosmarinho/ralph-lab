@@ -17,7 +17,7 @@
         "pytest tests/test_join.py passa"
       ],
       "priority": 1,
-      "passes": false,
+      "passes": true,
       "notes": ""
     },
     {
