@@ -1,0 +1,57 @@
+{
+  "project": "ralph-lab",
+  "branchName": "ralph/pipeline-vendas",
+  "description": "Pipeline CSV para grafico: inner join de vendas.csv e lojas.csv por id_loja gerando vendas_lojas.csv (420 linhas, descartando as 3 vendas orfas com id_loja=999, sem alterar os CSVs originais), pivot de receita por regiao x mes em pivot_receita.csv (cabecalho exato regiao,2026-01..2026-06, soma 931274.06), e index.html estatico com grafico da receita mensal por regiao e paragrafo de conclusao (>=300 caracteres) explicando o efeito das duas armadilhas dos dados (vendas orfas somem do relatorio; loja 108/Batel nao aparece por nao ter vendas). Cada etapa tem teste pytest proprio; o gate de qualidade de cada story e pytest verde para o arquivo de teste daquela story (projeto Python puro, sem typecheck).",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "Inner join de vendas e lojas",
+      "description": "Como analista, preciso juntar vendas.csv e lojas.csv por id_loja para ter cada venda associada a sua regiao, mantendo so vendas com loja valida.",
+      "acceptanceCriteria": [
+        "Le vendas.csv e lojas.csv da raiz do repo",
+        "receita_brl e lido como numero (ponto decimal), nunca como texto",
+        "Inner join por id_loja: as 3 vendas com id_loja=999 NAO entram no resultado",
+        "Resultado salvo em vendas_lojas.csv na raiz, mantendo a coluna receita_brl com esse nome exato",
+        "vendas.csv e lojas.csv originais nao sao alterados",
+        "tests/test_join.py com >=2 testes: vendas_lojas.csv tem exatamente 420 linhas de dados; soma de receita_brl e 931274.06 (tolerancia 0.5)",
+        "pytest tests/test_join.py passa"
+      ],
+      "priority": 1,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-002",
+      "title": "Pivot de receita por regiao x mes",
+      "description": "Como analista, preciso agregar a receita do join por regiao e mes para visualizar a evolucao temporal por regiao.",
+      "acceptanceCriteria": [
+        "Le vendas_lojas.csv (saida da US-001)",
+        "Extrai YYYY-MM da coluna data para agrupar por mes",
+        "Gera pivot com linhas = regiao (Centro-Oeste, Nordeste, Sudeste, Sul) e colunas = meses 2026-01 a 2026-06",
+        "Salva em pivot_receita.csv na raiz, cabecalho EXATO: regiao,2026-01,2026-02,2026-03,2026-04,2026-05,2026-06",
+        "Valores com ponto decimal, 2 casas, sem R$ e sem separador de milhar",
+        "Forma final: 4 linhas de dados + 1 cabecalho, 7 colunas",
+        "tests/test_pivot.py com >=2 testes: cabecalho exato; soma de todas as celulas numericas e 931274.06 (tolerancia 0.5)",
+        "pytest tests/test_pivot.py passa"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-003",
+      "title": "Pagina web com grafico e conclusao",
+      "description": "Como leitor do relatorio, preciso ver a receita mensal por regiao num grafico e entender em texto o que os numeros significam, incluindo o efeito das duas armadilhas dos dados.",
+      "acceptanceCriteria": [
+        "index.html na raiz do repo, pagina estatica (Chart.js via CDN, ou SVG/canvas gerado localmente)",
+        "Contem elemento de grafico reconhecivel (<canvas>, <svg>, Chart(, plotly, echarts, d3., ou vega) mostrando receita mensal por regiao, usando os dados de pivot_receita.csv",
+        "Contem um <p> de conclusao com no minimo 300 caracteres, mencionando a regiao lider (Sudeste) e o efeito de cada armadilha (vendas orfas somem do relatorio; loja 108/Batel nao aparece por nao ter vendas)",
+        "tests/test_web.py com >=1 teste verificando presenca do elemento de grafico e do paragrafo de conclusao com 300+ caracteres",
+        "pytest tests/test_web.py passa"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": ""
+    }
+  ]
+}
